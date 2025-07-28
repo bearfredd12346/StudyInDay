@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyInDay - Educational Resources</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .tab-container {
+            display: flex;
+            background-color: #34495e;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        .tab:hover {
+            background-color: #3d566e;
+        }
+        
+        .tab.active {
+            background-color: #2980b9;
+        }
+        
+        .content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .split-screen {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .split-half {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .calculator {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .calculator-display {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: right;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        .calculator button {
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            transition: background-color 0.2s;
+        }
+        
+        .calculator button:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .calculator button.operator {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .calculator button.operator:hover {
+            background-color: #2980b9;
+        }
+        
+        .calculator button.equals {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .calculator button.equals:hover {
+            background-color: #27ae60;
+        }
+        
+        .calculator button.clear {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .calculator button.clear:hover {
+            background-color: #c0392b;
+        }
+        
+        .pdf-section {
+            margin-top: 20px;
+        }
+        
+        .grade-section {
+            margin-bottom: 30px;
+        }
+        
+        .grade-title {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .pdf-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .pdf-list li a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        
+        .pdf-list li a:hover {
+            text-decoration: underline;
+        }
+        
+        .history-years {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .history-year {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .history-year:hover {
+            background-color: #2980b9;
+        }
+        
+        .history-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .history-content h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>StudyInDay</h1>
+        <p>Comprehensive educational resources for students</p>
+    </header>
+    
+    <div class="tab-container">
+        <div class="tab active" onclick="openTab('math')">Math Equation Quizzes</div>
+        <div class="tab" onclick="openTab('history')">History US United</div>
+        <div class="tab" onclick="openTab('science')">Science Experiments</div>
+        <div class="tab" onclick="openTab('english')">English Tests</div>
+    </div>
+    
+    <!-- Math Content -->
+    <div id="math" class="content active">
+        <h2>Math Equation Quizzes</h2>
+        <div class="split-screen">
+            <div class="split-half">
+                <h3>Math Calculator</h3>
+                <div class="calculator">
+                    <input type="text" class="calculator-display" id="math-display" readonly>
+                    <div class="calculator-buttons">
+                        <button onclick="appendToDisplay('7')">7</button>
+                        <button onclick="appendToDisplay('8')">8</button>
+                        <button onclick="appendToDisplay('9')">9</button>
+                        <button onclick="appendToDisplay('+')" class="operator">+</button>
+                        <button onclick="appendToDisplay('4')">4</button>
+                        <button onclick="appendToDisplay('5')">5</button>
+                        <button onclick="appendToDisplay('6')">6</button>
+                        <button onclick="appendToDisplay('-')" class="operator">-</button>
+                        <button onclick="appendToDisplay('1')">1</button>
+                        <button onclick="appendToDisplay('2')">2</button>
+                        <button onclick="appendToDisplay('3')">3</button>
+                        <button onclick="appendToDisplay('*')" class="operator">×</button>
+                        <button onclick="appendToDisplay('0')">0</button>
+                        <button onclick="appendToDisplay('.')">.</button>
+                        <button onclick="calculate()" class="equals">=</button>
+                        <button onclick="appendToDisplay('/')" class="operator">÷</button>
+                        <button onclick="clearDisplay()" class="clear">C</button>
+                        <button onclick="backspace()">⌫</button>
+                        <button onclick="appendToDisplay('(')">(</button>
+                        <button onclick="appendToDisplay(')')">)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="split-half">
+                <h3>Find Your Work</h3>
+                <div class="pdf-section">
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 6 Math Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Algebra Basics Worksheet.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Fractions and Decimals Practice.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Geometry Introduction.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Ratio and Proportion Problems.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 7 Math Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Pre-Algebra Concepts.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Integer Operations.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Probability Basics.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Expressions and Equations.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 8 Math Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Linear Equations Practice.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Functions Introduction.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Pythagorean Theorem Problems.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Scientific Notation Exercises.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">High School Math Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Algebra I Complete Review.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Geometry Proofs Practice.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Algebra II Advanced Problems.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Pre-Calculus Exercises.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Calculus Fundamentals.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Statistics and Probability.pdf</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- History Content -->
+    <div id="history" class="content">
+        <h2>History US United</h2>
+        <div class="split-screen">
+            <div class="split-half">
+                <h3>American History Timeline</h3>
+                <div class="history-years">
+                    <div class="history-year" onclick="showHistoryContent('colonial')">Colonial Era (1607-1775)</div>
+                    <div class="history-year" onclick="showHistoryContent('revolution')">Revolution (1775-1783)</div>
+                    <div class="history-year" onclick="showHistoryContent('constitution')">Constitution (1787-1791)</div>
+                    <div class="history-year" onclick="showHistoryContent('1800s')">Early 1800s</div>
+                    <div class="history-year" onclick="showHistoryContent('civilwar')">Civil War (1861-1865)</div>
+                    <div class="history-year" onclick="showHistoryContent('reconstruction')">Reconstruction (1865-1877)</div>
+                    <div class="history-year" onclick="showHistoryContent('gilded')">Gilded Age (1870s-1900)</div>
+                    <div class="history-year" onclick="showHistoryContent('progressive')">Progressive Era (1890s-1920)</div>
+                    <div class="history-year" onclick="showHistoryContent('ww1')">WWI (1914-1918)</div>
+                    <div class="history-year" onclick="showHistoryContent('roaring20s')">Roaring 20s</div>
+                    <div class="history-year" onclick="showHistoryContent('depression')">Great Depression (1929-1939)</div>
+                    <div class="history-year" onclick="showHistoryContent('ww2')">WWII (1939-1945)</div>
+                    <div class="history-year" onclick="showHistoryContent('coldwar')">Cold War (1947-1991)</div>
+                    <div class="history-year" onclick="showHistoryContent('civilrights')">Civil Rights (1954-1968)</div>
+                    <div class="history-year" onclick="showHistoryContent('vietnam')">Vietnam War (1955-1975)</div>
+                    <div class="history-year" onclick="showHistoryContent('modern')">Modern Era (1991-Present)</div>
+                </div>
+                
+                <div id="history-content" class="history-content">
+                    <h3>Select a period to learn more</h3>
+                    <p>Click on any of the historical periods above to display detailed information about that era in American history.</p>
+                </div>
+            </div>
+            
+            <div class="split-half">
+                <h3>History Worksheets</h3>
+                <div class="pdf-section">
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 6 History Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Early American Colonies.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Native American Cultures.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Revolutionary War Basics.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 7 History Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Constitution Study Guide.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Westward Expansion.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Industrial Revolution.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 8 History Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Civil War Comprehensive.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Reconstruction Era.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Immigration Patterns.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">High School History Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">World War I Analysis.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Great Depression Study.pdf</a></li>
+                            <li><a href="#" onclick="return false;">World War II Timeline.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Cold War Conflicts.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Civil Rights Movement.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Modern US Politics.pdf</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Science Content -->
+    <div id="science" class="content">
+        <h2>Science Experiments</h2>
+        <div class="split-screen">
+            <div class="split-half">
+                <h3>Science Calculator</h3>
+                <div class="calculator">
+                    <select id="science-calc-type" onchange="changeScienceCalc()" style="width:100%; padding:10px; margin-bottom:15px;">
+                        <option value="basic">Basic Calculator</option>
+                        <option value="physics">Physics Formulas</option>
+                        <option value="chemistry">Chemistry Formulas</option>
+                        <option value="biology">Biology Formulas</option>
+                    </select>
+                    
+                    <div id="basic-calc" class="calculator-type">
+                        <input type="text" class="calculator-display" id="science-display" readonly>
+                        <div class="calculator-buttons">
+                            <button onclick="appendToScienceDisplay('7')">7</button>
+                            <button onclick="appendToScienceDisplay('8')">8</button>
+                            <button onclick="appendToScienceDisplay('9')">9</button>
+                            <button onclick="appendToScienceDisplay('+')" class="operator">+</button>
+                            <button onclick="appendToScienceDisplay('4')">4</button>
+                            <button onclick="appendToScienceDisplay('5')">5</button>
+                            <button onclick="appendToScienceDisplay('6')">6</button>
+                            <button onclick="appendToScienceDisplay('-')" class="operator">-</button>
+                            <button onclick="appendToScienceDisplay('1')">1</button>
+                            <button onclick="appendToScienceDisplay('2')">2</button>
+                            <button onclick="appendToScienceDisplay('3')">3</button>
+                            <button onclick="appendToScienceDisplay('*')" class="operator">×</button>
+                            <button onclick="appendToScienceDisplay('0')">0</button>
+                            <button onclick="appendToScienceDisplay('.')">.</button>
+                            <button onclick="calculateScience()" class="equals">=</button>
+                            <button onclick="appendToScienceDisplay('/')" class="operator">÷</button>
+                            <button onclick="clearScienceDisplay()" class="clear">C</button>
+                        </div>
+                    </div>
+                    
+                    <div id="physics-calc" class="calculator-type" style="display:none;">
+                        <select id="physics-formula" onchange="changePhysicsFormula()" style="width:100%; padding:10px; margin-bottom:15px;">
+                            <option value="velocity">Velocity (v = d/t)</option>
+                            <option value="acceleration">Acceleration (a = Δv/Δt)</option>
+                            <option value="force">Force (F = ma)</option>
+                            <option value="kinetic">Kinetic Energy (KE = ½mv²)</option>
+                            <option value="potential">Potential Energy (PE = mgh)</option>
+                        </select>
+                        
+                        <div id="velocity-formula" class="physics-formula">
+                            <p>v = d/t</p>
+                            <label>Distance (d): <input type="number" id="velocity-d" placeholder="meters"></label><br>
+                            <label>Time (t): <input type="number" id="velocity-t" placeholder="seconds"></label><br>
+                            <button onclick="calculateVelocity()">Calculate Velocity</button>
+                            <p id="velocity-result"></p>
+                        </div>
+                        
+                        <div id="acceleration-formula" class="physics-formula" style="display:none;">
+                            <p>a = Δv/Δt</p>
+                            <label>Change in Velocity (Δv): <input type="number" id="acceleration-dv" placeholder="m/s"></label><br>
+                            <label>Change in Time (Δt): <input type="number" id="acceleration-dt" placeholder="seconds"></label><br>
+                            <button onclick="calculateAcceleration()">Calculate Acceleration</button>
+                            <p id="acceleration-result"></p>
+                        </div>
+                    </div>
+                    
+                    <div id="chemistry-calc" class="calculator-type" style="display:none;">
+                        <select id="chemistry-formula" onchange="changeChemistryFormula()" style="width:100%; padding:10px; margin-bottom:15px;">
+                            <option value="molarity">Molarity (M = mol/L)</option>
+                            <option value="density">Density (D = m/V)</option>
+                            <option value="ideal-gas">Ideal Gas Law (PV = nRT)</option>
+                        </select>
+                        
+                        <div id="molarity-formula" class="chemistry-formula">
+                            <p>M = mol/L</p>
+                            <label>Moles of Solute (mol): <input type="number" id="molarity-mol"></label><br>
+                            <label>Liters of Solution (L): <input type="number" id="molarity-l"></label><br>
+                            <button onclick="calculateMolarity()">Calculate Molarity</button>
+                            <p id="molarity-result"></p>
+                        </div>
+                    </div>
+                    
+                    <div id="biology-calc" class="calculator-type" style="display:none;">
+                        <select id="biology-formula" onchange="changeBiologyFormula()" style="width:100%; padding:10px; margin-bottom:15px;">
+                            <option value="bmi">BMI (kg/m²)</option>
+                            <option value="growth-rate">Population Growth Rate</option>
+                        </select>
+                        
+                        <div id="bmi-formula" class="biology-formula">
+                            <p>BMI = weight(kg) / height²(m)</p>
+                            <label>Weight (kg): <input type="number" id="bmi-weight"></label><br>
+                            <label>Height (m): <input type="number" id="bmi-height"></label><br>
+                            <button onclick="calculateBMI()">Calculate BMI</button>
+                            <p id="bmi-result"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="split-half">
+                <h3>Science Worksheets</h3>
+                <div class="pdf-section">
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 6 Science Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Basic Physics Concepts.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Introduction to Chemistry.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Cell Biology Basics.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 7 Science Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Forces and Motion.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Elements and Compounds.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Human Body Systems.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 8 Science Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Energy and Work.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Chemical Reactions.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Genetics Introduction.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">High School Science Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Physics Advanced Concepts.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Organic Chemistry.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Molecular Biology.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Environmental Science.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Astronomy Studies.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Scientific Method Labs.pdf</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- English Content -->
+    <div id="english" class="content">
+        <h2>English Tests</h2>
+        <div class="split-screen">
+            <div class="split-half">
+                <h3>Grammar and Writing Tools</h3>
+                <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    <h4>Grammar Checker</h4>
+                    <textarea id="grammar-text" style="width:100%; height:150px; padding:10px; margin-bottom:10px;" placeholder="Enter your text here to check for grammar errors"></textarea>
+                    <button onclick="checkGrammar()" style="padding:10px 15px; background-color:#3498db; color:white; border:none; border-radius:4px; cursor:pointer;">Check Grammar</button>
+                    <div id="grammar-results" style="margin-top:15px; padding:10px; background-color:#f9f9f9; border-radius:4px;"></div>
+                    
+                    <h4 style="margin-top:30px;">Writing Prompts</h4>
+                    <button onclick="generatePrompt()" style="padding:10px 15px; background-color:#2ecc71; color:white; border:none; border-radius:4px; cursor:pointer; margin-bottom:10px;">Generate Writing Prompt</button>
+                    <div id="writing-prompt" style="padding:15px; background-color:#f0f8ff; border-left:4px solid #3498db;"></div>
+                </div>
+            </div>
+            
+            <div class="split-half">
+                <h3>English Worksheets</h3>
+                <div class="pdf-section">
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 6 English Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Basic Grammar Rules.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Reading Comprehension 1.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Creative Writing Prompts.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 7 English Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Advanced Grammar.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Literary Analysis.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Essay Writing Guide.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">Grade 8 English Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">Vocabulary Building.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Shakespeare Introduction.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Research Paper Basics.pdf</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grade-section">
+                        <div class="grade-title">High School English Worksheets</div>
+                        <ul class="pdf-list">
+                            <li><a href="#" onclick="return false;">AP English Literature.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Rhetorical Analysis.pdf</a></li>
+                            <li><a href="#" onclick="return false;">College Essay Writing.pdf</a></li>
+                            <li><a href="#" onclick="return false;">World Literature.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Poetry Analysis.pdf</a></li>
+                            <li><a href="#" onclick="return false;">Drama Studies.pdf</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>StudyInDay &copy; 2023 - All Rights Reserved</p>
+        <p>No login required - Free educational resources for students</p>
+    </footer>
+    
+    <script>
+        // Tab functionality
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const contents = document.getElementsByClassName('content');
+            
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // Math Calculator Functions
+        let mathDisplay = document.getElementById('math-display');
+        
+        function appendToDisplay(value) {
+            mathDisplay.value += value;
+        }
+        
+        function clearDisplay() {
+            mathDisplay.value = '';
+        }
+        
+        function backspace() {
+            mathDisplay.value = mathDisplay.value.slice(0, -1);
+        }
+        
+        function calculate() {
+            try {
+                mathDisplay.value = eval(mathDisplay.value);
+            } catch (error) {
+                mathDisplay.value = 'Error';
+            }
+        }
+        
+        // Science Calculator Functions
+        let scienceDisplay = document.getElementById('science-display');
+        
+        function appendToScienceDisplay(value) {
+            scienceDisplay.value += value;
+        }
+        
+        function clearScienceDisplay() {
+            scienceDisplay.value = '';
+        }
+        
+        function calculateScience() {
+            try {
+                scienceDisplay.value = eval(scienceDisplay.value);
+            } catch (error) {
+                scienceDisplay.value = 'Error';
+            }
+        }
+        
+        function changeScienceCalc() {
+            const calcType = document.getElementById('science-calc-type').value;
+            const calculators = document.getElementsByClassName('calculator-type');
+            
+            for (let i = 0; i < calculators.length; i++) {
+                calculators[i].style.display = 'none';
+            }
+            
+            document.getElementById(calcType + '-calc').style.display = 'block';
+        }
+        
+        // Physics Calculator Functions
+        function changePhysicsFormula() {
+            const formula = document.getElementById('physics-formula').value;
+            const formulas = document.getElementsByClassName('physics-formula');
+            
+            for (let i = 0; i < formulas.length; i++) {
+                formulas[i].style.display = 'none';
+            }
+            
+            document.getElementById(formula + '-formula').style.display = 'block';
+        }
+        
+        function calculateVelocity() {
+            const d = parseFloat(document.getElementById('velocity-d').value);
+            const t = parseFloat(document.getElementById('velocity-t').value);
+            
+            if (isNaN(d) || isNaN(t) || t === 0) {
+                document.getElementById('velocity-result').textContent = 'Please enter valid numbers (time cannot be zero)';
+                return;
+            }
+            
+            const v = d / t;
+            document.getElementById('velocity-result').textContent = `Velocity = ${v.toFixed(2)} m/s`;
+        }
+        
+        function calculateAcceleration() {
+            const dv = parseFloat(document.getElementById('acceleration-dv').value);
+            const dt = parseFloat(document.getElementById('acceleration-dt').value);
+            
+            if (isNaN(dv) || isNaN(dt) || dt === 0) {
+                document.getElementById('acceleration-result').textContent = 'Please enter valid numbers (time cannot be zero)';
+                return;
+            }
+            
+            const a = dv / dt;
+            document.getElementById('acceleration-result').textContent = `Acceleration = ${a.toFixed(2)} m/s²`;
+        }
+        
+        // Chemistry Calculator Functions
+        function changeChemistryFormula() {
+            const formula = document.getElementById('chemistry-formula').value;
+            const formulas = document.getElementsByClassName('chemistry-formula');
+            
+            for (let i = 0; i < formulas.length; i++) {
+                formulas[i].style.display = 'none';
+            }
+            
+            document.getElementById(formula + '-formula').style.display = 'block';
+        }
+        
+        function calculateMolarity() {
+            const mol = parseFloat(document.getElementById('molarity-mol').value);
+            const l = parseFloat(document.getElementById('molarity-l').value);
+            
+            if (isNaN(mol) || isNaN(l) || l === 0) {
+                document.getElementById('molarity-result').textContent = 'Please enter valid numbers (volume cannot be zero)';
+                return;
+            }
+            
+            const m = mol / l;
+            document.getElementById('molarity-result').textContent = `Molarity = ${m.toFixed(2)} M`;
+        }
+        
+        // Biology Calculator Functions
+        function changeBiologyFormula() {
+            const formula = document.getElementById('biology-formula').value;
+            const formulas = document.getElementsByClassName('biology-formula');
+            
+            for (let i = 0; i < formulas.length; i++) {
+                formulas[i].style.display = 'none';
+            }
+            
+            document.getElementById(formula + '-formula').style.display = 'block';
+        }
+        
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('bmi-weight').value);
+            const height = parseFloat(document.getElementById('bmi-height').value);
+            
+            if (isNaN(weight) || isNaN(height) || height === 0) {
+                document.getElementById('bmi-result').textContent = 'Please enter valid numbers (height cannot be zero)';
+                return;
+            }
+            
+            const bmi = weight / (height * height);
+            document.getElementById('bmi-result').textContent = `BMI = ${bmi.toFixed(1)}`;
+            
+            let category = '';
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal weight';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
+            
+            document.getElementById('bmi-result').textContent += ` (${category})`;
+        }
+        
+        // History Content Functions
+        function showHistoryContent(period) {
+            const contentDiv = document.getElementById('history-content');
+            let title = '';
+            let content = '';
+            
+            switch(period) {
+                case 'colonial':
+                    title = 'Colonial Era (1607-1775)';
+                    content = 'The Colonial Era began with the founding of Jamestown in 1607 and lasted until the outbreak of the American Revolution. This period saw the establishment of the 13 colonies, conflicts with Native Americans, the development of colonial governments, and growing tensions with Britain over taxation and representation. Important events include the Mayflower Compact (1620), the Salem Witch Trials (1692), and the French and Indian War (1754-1763).';
+                    break;
+                case 'revolution':
+                    title = 'American Revolution (1775-1783)';
+                    content = 'The American Revolution was the war between the 13 American colonies and Great Britain, which led to the establishment of the United States as an independent nation. Key events include the Battles of Lexington and Concord (1775), the Declaration of Independence (1776), the winter at Valley Forge (1777-1778), and the decisive American victory at Yorktown (1781). The war ended with the Treaty of Paris in 1783.';
+                    break;
+                case 'constitution':
+                    title = 'Constitution and Early Republic (1787-1791)';
+                    content = 'After the weaknesses of the Articles of Confederation became apparent, delegates met in Philadelphia in 1787 to draft a new Constitution. The resulting document established a stronger federal government with three branches and a system of checks and balances. The Bill of Rights (first 10 amendments) was added in 1791 to protect individual liberties. George Washington became the first President in 1789.';
+                    break;
+                case '1800s':
+                    title = 'Early 1800s and Expansion';
+                    content = 'This period saw significant territorial expansion and the growth of American democracy. Key events include the Louisiana Purchase (1803), the War of 1812, the Monroe Doctrine (1823), the Trail of Tears (1830s), and the Mexican-American War (1846-1848). The Industrial Revolution began transforming the economy, and reform movements like abolitionism and women\'s rights gained momentum.';
+                    break;
+                case 'civilwar':
+                    title = 'Civil War (1861-1865)';
+                    content = 'The Civil War was fought between the Northern states (Union) and Southern states (Confederacy) primarily over the issues of slavery and states\' rights. Major battles included Fort Sumter (1861), Antietam (1862), Gettysburg (1863), and the Union capture of Atlanta (1864). The war ended with Confederate surrender in 1865, resulting in the abolition of slavery (13th Amendment) but leaving the South devastated.';
+                    break;
+                case 'reconstruction':
+                    title = 'Reconstruction (1865-1877)';
+                    content = 'Reconstruction was the period after the Civil War when the federal government attempted to rebuild the South and integrate freed slaves into society. The 14th (citizenship) and 15th (voting rights) Amendments were passed, but Southern resistance led to the rise of Jim Crow laws and the Ku Klux Klan. Reconstruction ended with the Compromise of 1877, which withdrew federal troops from the South.';
+                    break;
+                case 'gilded':
+                    title = 'Gilded Age (1870s-1900)';
+                    content = 'The Gilded Age was marked by rapid industrialization, urbanization, and immigration, along with significant political corruption. Robber barons like Rockefeller and Carnegie built vast industrial empires while workers often labored in poor conditions, leading to the growth of labor unions. The period saw technological innovations, the closing of the Western frontier, and increasing wealth inequality.';
+                    break;
+                case 'progressive':
+                    title = 'Progressive Era (1890s-1920)';
+                    content = 'The Progressive Era was a period of social activism and political reform aimed at addressing problems caused by industrialization, urbanization, and corruption. Reforms included women\'s suffrage (19th Amendment), antitrust laws, food and drug regulations, and the income tax. Notable figures included Theodore Roosevelt, Jane Addams, and Upton Sinclair. The era ended with World War I.';
+                    break;
+                case 'ww1':
+                    title = 'World War I (1914-1918)';
+                    content = 'The U.S. entered World War I in 1917 after years of neutrality. American forces helped tip the balance in favor of the Allies against Germany and the Central Powers. The war led to significant social changes at home, including women entering the workforce and the Great Migration of African Americans to Northern cities. The Treaty of Versailles (1919) and League of Nations were controversial outcomes.';
+                    break;
+                case 'roaring20s':
+                    title = 'Roaring Twenties (1920-1929)';
+                    content = 'The 1920s were a time of economic prosperity, cultural change, and social conflict. Jazz music, flappers, and the Harlem Renaissance flourished, while Prohibition (18th Amendment) led to organized crime. The decade saw the rise of consumer culture, the automobile, and radio, but also the resurgence of the KKK and anti-immigrant sentiment. The stock market crash of 1929 ended the era.';
+                    break;
+                case 'depression':
+                    title = 'Great Depression (1929-1939)';
+                    content = 'The Great Depression was the worst economic downturn in U.S. history, beginning with the stock market crash of 1929. Unemployment reached 25%, banks failed, and many Americans lost their homes and savings. President Franklin D. Roosevelt\'s New Deal programs provided relief, recovery, and reform through programs like Social Security, the CCC, and the WPA. The Depression ended with World War II.';
+                    break;
+                case 'ww2':
+                    title = 'World War II (1939-1945)';
+                    content = 'The U.S. entered WWII after the Japanese attack on Pearl Harbor in 1941. The war effort mobilized the entire nation, ending the Depression and transforming the economy. Key events included D-Day (1944), the Manhattan Project, and the Holocaust. The war ended with Allied victory in 1945 after the atomic bombings of Hiroshima and Nagasaki, establishing the U.S. as a global superpower.';
+                    break;
+                case 'coldwar':
+                    title = 'Cold War (1947-1991)';
+                    content = 'The Cold War was a period of geopolitical tension between the U.S. and Soviet Union without direct military conflict. It featured the arms race, space race, McCarthyism, and proxy wars in Korea and Vietnam. Key events included the Berlin Airlift (1948), Cuban Missile Crisis (1962), and fall of the Berlin Wall (1989). The Cold War ended with the collapse of the Soviet Union in 1991.';
+                    break;
+                case 'civilrights':
+                    title = 'Civil Rights Movement (1954-1968)';
+                    content = 'The Civil Rights Movement sought to end racial segregation and discrimination against African Americans. Landmark events included Brown v. Board of Education (1954), the Montgomery Bus Boycott (1955), the March on Washington (1963), and the Civil Rights Act (1964). Leaders like Martin Luther King Jr., Rosa Parks, and Malcolm X employed different strategies to achieve equality.';
+                    break;
+                case 'vietnam':
+                    title = 'Vietnam War (1955-1975)';
+                    content = 'The Vietnam War was a controversial conflict where the U.S. supported South Vietnam against communist North Vietnam. Growing opposition at home led to massive protests, especially after the Tet Offensive (1968) and revelations about the My Lai massacre. The war ended with U.S. withdrawal in 1973 and North Vietnamese victory in 1975, leaving deep divisions in American society.';
+                    break;
+                case 'modern':
+                    title = 'Modern Era (1991-Present)';
+                    content = 'The post-Cold War era has been marked by globalization, technological revolution, and new challenges. Key events include the Gulf War (1991), 9/11 attacks (2001), wars in Afghanistan and Iraq, the Great Recession (2008), and the COVID-19 pandemic (2020). Political polarization has increased, while issues like climate change, immigration, and healthcare dominate national debates.';
+                    break;
+            }
+            
+            contentDiv.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
+        }
+        
+        // English Tools Functions
+        function checkGrammar() {
+            const text = document.getElementById('grammar-text').value;
+            if (!text.trim()) {
+                document.getElementById('grammar-results').innerHTML = '<p>Please enter some text to check.</p>';
+                return;
+            }
+            
+            // This is a simplified version - a real implementation would use a grammar checking API
+            const fakeErrors = [
+                {issue: "Possible spelling mistake", suggestion: "Did you mean 'their' instead of 'thier'?"},
+                {issue: "Passive voice", suggestion: "Consider using active voice for stronger writing"},
+                {issue: "Wordy phrase", suggestion: "'Due to the fact that' could be shortened to 'Because'"}
+            ];
+            
+            let resultsHTML = '<h4>Potential Issues:</h4><ul>';
+            for (let error of fakeErrors) {
+                resultsHTML += `<li><strong>${error.issue}:</strong> ${error.suggestion}</li>`;
+            }
+            resultsHTML += '</ul>';
+            
+            document.getElementById('grammar-results').innerHTML = resultsHTML;
+        }
+        
+        function generatePrompt() {
+            const prompts = [
+                "Write about a time you faced a challenge and how you overcame it.",
+                "If you could invent any new technology, what would it be and why?",
+                "Describe a place that is special to you and explain why it's important.",
+                "Should school uniforms be required? State your position and support it with reasons.",
+                "Write a short story that begins with the line: 'The door creaked open, revealing a secret I was never meant to discover.'",
+                "Compare and contrast two historical figures from different time periods.",
+                "What does courage mean to you? Provide examples from literature or real life.",
+                "If you could have a conversation with any person from history, who would it be and what would you discuss?"
+            ];
+            
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('writing-prompt').innerHTML = `<strong>Prompt:</strong> ${randomPrompt}`;
+        }
+    </script>
+</body>
+</html>
